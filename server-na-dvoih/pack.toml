@@ -1,0 +1,13 @@
+name = "Сервер на двоих — быстрая"
+author = "ERAZAY"
+version = "1.0.0"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "9b96a5fceed3a01be7c81e144f6bd5a5a83ba53d641ad817130181ee9a6272d5"
+
+[versions]
+fabric = "0.19.5"
+minecraft = "26.3"
