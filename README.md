@@ -7,7 +7,7 @@
 
 | Сборка | Игра | Что внутри | Ссылка для Prism |
 |---|---|---|---|
-| Сервер на двоих — быстрая | 26.3, Fabric | Fabulously Optimized (плавнее, больше кадров) + Bobby (дальняя прорисовка) | `https://raw.githubusercontent.com/zorigto736-svg/minecraft-sborki/main/prism/server-na-dvoih.zip` |
+| Сервер на двоих — быстрая | 26.3, Fabric | Fabulously Optimized (плавнее, больше кадров) + Bobby (дальняя прорисовка) + Честный пинг (свой пинг в Tab точный с первой секунды) | `https://raw.githubusercontent.com/zorigto736-svg/minecraft-sborki/main/prism/server-na-dvoih.zip` |
 
 Сервер: `Smerti999.aternos.me` — уже в списке серверов внутри сборки.
 
@@ -40,3 +40,9 @@
   с Modrinth, сверху свои моды (`extra_mods`) и файлы (`extra_files`).
   Запуск: `python3 -I tools/build_pack.py <папка для скачанного>`.
 - `servers.dat` кладётся только если его ещё нет, чтобы не затирать свой список серверов.
+- `src-mods/chestnyi-ping/` — свой мод «Честный пинг». Цифру пинга в Tab считает сервер:
+  раз в 15 секунд и со сглаживанием от нуля, поэтому первые минуты после входа она занижена.
+  Мод раз в секунду шлёт серверу тот же запрос, что и график F3+3 (сервер отвечает на него
+  сразу), и подставляет в свою строку Tab середину последних пяти замеров — и число, и полоски.
+  Чужие строки не трогает: их пинг знает только сервер. Сборка мода: `src-mods/chestnyi-ping/build.sh`
+  (javac из Java 25, которую скачал Prism; jar ложится в `files/`), затем `tools/build_pack.py`.

@@ -1,0 +1,8 @@
+name = "chestnyi-ping"
+filename = "chestnyi-ping-1.0.0.jar"
+side = "client"
+
+[download]
+url = "https://raw.githubusercontent.com/zorigto736-svg/minecraft-sborki/main/files/chestnyi-ping-1.0.0.jar"
+hash-format = "sha512"
+hash = "d7d17d1b17f46df863ecad4c282174361a65b857c32858946d537727c241cd17dac2fcfcb237e505717a3dbcc8f2708bfe37111d6e259f15a1d64f817242cfb6"

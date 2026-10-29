@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "chestnyi-ping",
+  "version": "1.0.0",
+  "name": "Честный пинг",
+  "description": "Своя строка в Tab показывает настоящий пинг с первой секунды: отдельный замер раз в секунду вместо сглаженной цифры сервера.",
+  "authors": ["ERAZAY"],
+  "contact": {"sources": "https://github.com/zorigto736-svg/minecraft-sborki"},
+  "license": "MIT",
+  "environment": "client",
+  "mixins": ["chestnyi-ping.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "26.3.x"
+  }
+}

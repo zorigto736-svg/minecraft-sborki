@@ -231,6 +231,11 @@ hash = "b7e80588dfa607237b58b415aa75efcf1e5b49174b214387c6c298ebcf7f90ac"
 metafile = true
 
 [[files]]
+file = "mods/chestnyi-ping.pw.toml"
+hash = "e985a51eed0820fe2b71d2d0d874cce3f59253b743cb53101b70486e2c617604"
+metafile = true
+
+[[files]]
 file = "mods/cloth-config-fabric-26.3.159.pw.toml"
 hash = "b136e76c956e4c3227c5691b3884282ac9021586d227a891e60e3224d479879e"
 metafile = true

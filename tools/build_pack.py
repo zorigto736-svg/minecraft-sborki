@@ -28,11 +28,13 @@ ALLOWED = {"cdn.modrinth.com"}
 PACK = {
     "dir": "server-na-dvoih",
     "name": "Сервер на двоих — быстрая",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "minecraft": "26.3",
     "lwjgl": "3.4.3",  # 26.3 просит 3.4.3; со старой 3.4.1 Sodium не запускает игру
     "base": "fabulously-optimized",  # модпак-основа на Modrinth
     "extra_mods": ["bobby"],
+    # свои моды из этого репозитория (src-mods/…/build.sh кладёт jar в files/): качаются с GitHub
+    "own_mods": ["files/chestnyi-ping-1.0.0.jar"],
     # свои файлы: путь в сборке → (откуда, preserve). preserve — только если файла ещё нет,
     # чтобы не затирать то, что игрок поменял сам (список серверов)
     "extra_files": {"servers.dat": ("files/servers.dat", True)},
@@ -126,7 +128,14 @@ def main():
         f = next((x for x in v["files"] if x.get("primary")), v["files"][0])
         files[f"mods/{slug}.pw.toml"] = (mod_toml(slug, f["filename"], f["url"], f["hashes"]["sha512"],
                                                   "client").encode(), True, False)
-        print(f"свой мод: {slug} {v['version_number']}")
+        print(f"мод с Modrinth: {slug} {v['version_number']}")
+    for src in PACK["own_mods"]:
+        jar = REPO / src
+        name = jar.stem.rsplit("-", 1)[0]
+        files[f"mods/{name}.pw.toml"] = (mod_toml(name, jar.name, f"{RAW}/{src}",
+                                                  hashlib.sha512(jar.read_bytes()).hexdigest(), "client").encode(),
+                                         True, False)
+        print(f"свой мод: {jar.name}")
     for rel, (src, preserve) in PACK["extra_files"].items():
         files[rel] = ((REPO / src).read_bytes(), False, preserve)
 
@@ -179,13 +188,15 @@ def build_prism_zip(loader, default_options):
     opts += [f"{k}:{v}" for k, v in PACK["options"].items() if k not in seen]
     dst = REPO / "prism" / f"{PACK['dir']}.zip"
     dst.parent.mkdir(exist_ok=True)
+    entries = {"instance.cfg": cfg.encode(), "mmc-pack.json": json.dumps(mmc, indent=4).encode(),
+               "minecraft/options.txt": ("\n".join(opts) + "\n").encode()}
+    for jar in ("packwiz-installer-bootstrap.jar", "packwiz-installer.jar"):
+        entries[f"minecraft/{jar}"] = (REPO / "tools" / jar).read_bytes()
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("instance.cfg", cfg)
-        z.writestr("mmc-pack.json", json.dumps(mmc, indent=4))
-        z.writestr("minecraft/options.txt", "\n".join(opts) + "\n")
-        for jar in ("packwiz-installer-bootstrap.jar", "packwiz-installer.jar"):
-            z.write(REPO / "tools" / jar, f"minecraft/{jar}")
+        for name, data in entries.items():
+            # постоянная дата — архив меняется только когда меняется содержимое
+            z.writestr(zipfile.ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0)), data, zipfile.ZIP_DEFLATED)
     dst.write_bytes(buf.getvalue())
     print(f"для Prism: {dst.relative_to(REPO)} — {dst.stat().st_size / 1e6:.1f} МБ, ссылка {RAW}/prism/{dst.name}")
 
